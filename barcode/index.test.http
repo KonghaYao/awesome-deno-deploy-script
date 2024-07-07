@@ -1,0 +1,2 @@
+
+GET http://localhost:8000/bar?data=1234&format=pharmacode&lineColor=%230aa&width=4&height=40&displayValue=false

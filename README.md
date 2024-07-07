@@ -10,3 +10,4 @@
 6. [chatroom](./chatroom/index.mjs) - 在线 Websocket 聊天室, 支持 WebRTC，无 KV 存储，[Sono](https://jsr.io/@sono/core)
 7. [data-chart](./data-chart/index.mjs) - 在线渲染 echarts 图表为 SVG 数据
 8. [qrcode](./qrcode/index.mjs) - 支持 QRcode 解析与生成的服务器脚本
+9. [barcode](./qrcode/index.mjs) - 支持 Barcode 生成的脚本
