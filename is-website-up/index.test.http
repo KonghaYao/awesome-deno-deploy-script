@@ -1,0 +1,3 @@
+@host = localhost:8000
+# 这个 .http 文件用于演示如何调用上面定义的服务
+GET http://{{host}}/?url=https://bing.com
