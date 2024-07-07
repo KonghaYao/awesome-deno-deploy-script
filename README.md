@@ -8,3 +8,4 @@
 4. [url-shortener](./url-shortener/index.mjs) - URL 短链接生成，非常简单易用
 5. [is-website-up](./is-website-up/index.mjs) - 检查网站是否可用
 6. [chatroom](./chatroom/index.mjs) - 在线 Websocket 聊天室, 支持 WebRTC，无 KV 存储，[Sono](https://jsr.io/@sono/core)
+7. [data-chart](./data-chart/index.mjs) - 在线渲染 echarts 图表为 SVG 数据
