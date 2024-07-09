@@ -1,0 +1,16 @@
+@origin = http://localhost:8000/deno-kv
+### 获取数据
+GET {{origin}}/list
+
+
+### 写入一个数据
+POST {{origin}}/set
+Content-Type: application/json
+
+{
+  "key": ["test"],
+  "value": "2"
+}
+
+### 删除数据
+GET {{origin}}/delete?key=["test"]
