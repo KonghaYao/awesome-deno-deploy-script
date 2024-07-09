@@ -1,7 +1,9 @@
 import { Elysia, t } from "https://esm.sh/elysia";
 import { oauth2 } from "https://esm.sh/@myazarc/elysia-oauth2-server";
 import { snake } from "npm:naming-style";
+import { DenoKVModel } from "./deno_kv.model.ts";
 
+/** 标准 OAuth 是蛇形命名法，所以需要转化 key 值 */
 const toSnakeObject = (data) => {
   return Object.fromEntries(
     Object.entries(data).map(([key, value]) => {
@@ -13,7 +15,7 @@ const toSnakeObject = (data) => {
   );
 };
 
-import { MemoryModel } from "./memory.model.mjs";
+const kv = await Deno.openKv();
 const app = new Elysia();
 app
   .get("/", () => {
@@ -43,7 +45,8 @@ app
 app
   .use(
     oauth2({
-      model: MemoryModel,
+      model: await new DenoKVModel(kv).initExample(),
+      // model: new MemoryModel(),
     })
   )
   .post(

@@ -77,6 +77,8 @@
     import { SonoRTC } from "https://deno.land/x/sono@v1.1/src/sonoRTC.js"
 
     const sono = new SonoClient('ws://localhost:8000/ws');
+    // use sono example 
+    // const sono = new SonoClient('wss://healthy-newt-50.deno.dev/ws');
 
     sono.onconnection(() => {
         sono.message('client connected')
