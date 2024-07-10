@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processing Server Test</title>
+    <style>
+        body {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <span> Original Image </span>
+
+        <img src="http://localhost:8000/test.png" alt="Original Image" />
+
+    </section>
+    <section>
+        <span> Resized Image </span>
+
+        <img src="http://localhost:8000/test.png?w=200&h=200&fit=cover" alt="Resized Image">
+
+    </section>
+    <section>
+        <span> Brightness Adjusted </span>
+
+        <img src="http://localhost:8000/test.png?brightness=1.5" alt="Brightness Adjusted">
+
+    </section>
+    <section>
+        <span> Saturation Adjusted </span>
+
+        <img src="http://localhost:8000/test.png?saturation=0.5" alt="Saturation Adjusted">
+
+    </section>
+    <section>
+        <span> Hue Adjusted </span>
+
+        <img src="http://localhost:8000/test.png?hue=90" alt="Hue Adjusted">
+
+    </section>
+    <!-- normalize -->
+    <section>
+        <span> Normalized </span>
+
+        <img src="http://localhost:8000/test.png?normalize=true" alt="Normalized">
+    </section>
+    <section>
+        <span> Negate </span>
+
+        <img src="http://localhost:8000/test.png?negate=true" alt="Negate">
+        </img>
+    </section>
+    <section>
+        <span> Gamma </span>
+        <img src="http://localhost:8000/test.png?gamma=3" alt=" Gamma">
+        </img>
+    </section>
+    <section>
+        <span> Median </span>
+        <img src="http://localhost:8000/test.png?median=300" alt=" Median">
+        </img>
+    </section>
+
+
+    </section>
+
+    <section>
+        <span> Format Changed </span>
+
+        <span>jpg</span>
+        <img src="http://localhost:8000/test.png.jpeg?type=jpeg&q=50" alt="PNG Format">
+
+
+    </section>
+    <section>
+        <span>webp</span>
+        <img src="http://localhost:8000/test.png.webp?type=webp&q=50" alt="Webp Format">
+    </section>
+
+    <section>
+        <span> GreyScale Image </span>
+
+        <img src="http://localhost:8000/test.png?greyscale=true" alt="GreyScale Image">
+
+    </section>
+    <section>
+        <span> Blurred Image </span>
+
+        <img src="http://localhost:8000/test.png?blur=5" alt="Blurred Image">
+
+    </section>
+    <section>
+        <span> Flipped Image </span>
+
+        <img src="http://localhost:8000/test.png?flip=true" alt="Flipped Image">
+
+    </section>
+    <section>
+        <span> Flopped Image </span>
+
+        <img src="http://localhost:8000/test.png?flop=true" alt="Flopped Image">
+    </section>
+    <section>
+        <span> Rotated Image </span>
+
+        <img src="http://localhost:8000/test.png?rotate=120" alt="Rotated Image">
+
+    </section>
+</body>
+
+</html>

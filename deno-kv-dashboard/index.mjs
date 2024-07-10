@@ -21,6 +21,7 @@ const DenoAdmin = async (req, prefix = "/deno-kv", htmlText = "") => {
                 start: qs.get("start")
                     ? JSON.parse(qs.get("start"))
                     : undefined,
+                end: qs.get("end") ? JSON.parse(qs.get("end")) : undefined,
             }
         );
         const list = [];

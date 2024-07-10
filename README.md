@@ -11,7 +11,10 @@
 7. [data-chart](./data-chart/index.mjs) - 在线渲染 echarts 图表为 SVG 数据
 8. [qrcode](./qrcode/index.mjs) - 支持 QRcode 解析与生成的服务器脚本
 9. [barcode](./qrcode/index.mjs) - 支持 Barcode 生成的脚本
+10. [image-server](./image-server/index.mjs) - 图片服务器，可以在线帮你通过 url 处理图像
 
 ## Deno will Do
 
-1. [ ] 图片处理服务器
+1. [ ] deno kv dashboard
+2. [ ] OAuth 授权服务器
+3. [x] 图片处理服务器
