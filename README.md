@@ -18,3 +18,8 @@
 1. [ ] deno kv dashboard
 2. [ ] OAuth 授权服务器
 3. [x] 图片处理服务器
+
+
+```sh
+curl -fsSL https://x.deno.js.cn/install.sh | sh
+```

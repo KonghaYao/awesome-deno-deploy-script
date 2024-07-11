@@ -5,7 +5,6 @@ export interface Client {
   grants: string[];
 }
 export interface User {
-  id: string;
   username: string;
   password: string;
 }
@@ -36,13 +35,26 @@ export interface AuthorizationCode {
 }
 export interface OAuth2Model {
   getAccessToken(accessToken: string): Promise<Token | undefined>;
-  getClient(clientId: string, clientSecret: string | null): Promise<Client | undefined>;
+  getClient(
+    clientId: string,
+    clientSecret?: string
+  ): Promise<Client | undefined>;
   getUser(username: string, password: string): Promise<User | undefined>;
   saveToken(token: Token, client: Client, user: User): Promise<Token>;
-  saveAuthorizationCode(code: AuthorizationCode, client: Client, user: User): Promise<AuthorizationCode>;
-  getAuthorizationCode(authorizationCode: string): Promise<AuthorizationCode | undefined>;
+  saveAuthorizationCode(
+    code: AuthorizationCode,
+    client: Client,
+    user: User
+  ): Promise<AuthorizationCode>;
+  getAuthorizationCode(
+    authorizationCode: string
+  ): Promise<AuthorizationCode | undefined>;
   revokeAuthorizationCode(code: AuthorizationCode): Promise<boolean>;
   getUserFromClient(client: Client): Promise<User | undefined>;
   getRefreshToken(refreshToken: string): Promise<Token | undefined>;
   revokeToken(token: Token): Promise<boolean>;
+}
+export interface OAuth2ServerModel {
+  registerUser(user: User): Promise<boolean>;
+  registerClient(client: Client): Promise<boolean>;
 }

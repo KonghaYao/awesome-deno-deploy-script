@@ -1,8 +1,14 @@
 import { Elysia, t } from "https://esm.sh/elysia";
-import { oauth2 } from "https://esm.sh/@myazarc/elysia-oauth2-server";
+import { ElysiaOAuthServer } from "./ElysiaOAuthServer.ts";
 import { snake } from "npm:naming-style";
 import { DenoKVModel } from "./deno_kv.model.ts";
+const oauth2 = (options) => {
+  const oauth = new ElysiaOAuthServer(options);
 
+  return new Elysia({
+    name: "ElysiaOAuth2Server",
+  }).decorate("oauth2", oauth);
+};
 /** 标准 OAuth 是蛇形命名法，所以需要转化 key 值 */
 const toSnakeObject = (data) => {
   return Object.fromEntries(
@@ -15,12 +21,56 @@ const toSnakeObject = (data) => {
   );
 };
 
+async function initExample(model) {
+  await model.registerClient(
+    {
+      id: "clientId1",
+      clientSecret: "client@secret",
+      redirectUris: ["http://localhost:8000/callback.html"],
+      grants: [
+        "password",
+        "authorization_code",
+        "client_credentials",
+        "refresh_token",
+      ],
+    },
+    true
+  );
+  await model.registerUser(
+    {
+      username: "mira",
+      password: "12345",
+    },
+    true
+  );
+  return model;
+}
+
 const kv = await Deno.openKv();
 const app = new Elysia();
+app.get(
+  "/api/users",
+  ({ oauth2, ...payload }) => {
+    return oauth2.authenticate(payload).then((res) => {
+      return { code: 0, msg: "资源获取成功" };
+    });
+  },
+  {
+    headers: t.Object({
+      authorization: t.String(),
+    }),
+  }
+);
+const model = await initExample(new DenoKVModel(kv));
 app
+  .use(
+    oauth2({
+      model,
+    })
+  )
   .get("/", () => {
     return new Response(
-      Deno.readTextFileSync("./oauth2-server/index.test.html"),
+      Deno.readTextFileSync("./oauth2-server/callback.html"),
       {
         headers: {
           "content-type": "text/html; charset=utf-8",
@@ -28,43 +78,38 @@ app
       }
     );
   })
-  .get(
-    // verifing token
-    "/api/users",
+  .post(
+    "/oauth/user/register",
     ({ oauth2, ...payload }) => {
-      return oauth2.authenticate(payload).then((res) => toSnakeObject(res));
-    },
-    {
-      headers: t.Object({
-        // Example: "Basic " + Buffer.from("clientId1:client@secret").toString("base64"),
-        authorization: t.String(),
-      }),
+      return oauth2.registerUser(payload).then((res) => toSnakeObject(res));
     }
-  );
-
-app
-  .use(
-    oauth2({
-      model: await new DenoKVModel(kv).initExample(),
-      // model: new MemoryModel(),
-    })
+    // TODO 添加 token 验证
+  )
+  .post(
+    "/oauth/client/register",
+    ({ oauth2, ...payload }) => {
+      return oauth2.registerClient(payload).then((res) => toSnakeObject(res));
+    }
+    // TODO 添加 token 验证
   )
   .post(
     // 获取 token 的接口
     "/login/oauth/access_token",
     ({ oauth2, ...payload }) => {
-      return oauth2.token(payload).then((res) =>
-        toSnakeObject({
-          token_type: "bearer",
-          ...res.data,
+      return oauth2
+        .token(payload)
+        .then((res) => {
+          return toSnakeObject({
+            token_type: "bearer",
+            ...res,
+          });
         })
-      );
+        .catch((err) => {
+          console.log(err);
+          return { code: 0, error: err.message };
+        });
     },
     {
-      headers: t.Object({
-        // Example: "Basic " + Buffer.from("clientId1:client@secret").toString("base64"),
-        authorization: t.String(),
-      }),
       body: t.Object({
         username: t.Optional(t.String()),
         password: t.Optional(t.String()),
@@ -83,15 +128,30 @@ app
     }
   )
   .post(
-    // verifing token
+    // 生成授权码跳转地址
     "/login/oauth/authorize",
-    ({ oauth2, ...payload }) => {
-      return oauth2.authenticate(payload).then((res) => toSnakeObject(res));
+    async ({ oauth2, ...payload }) => {
+      const code = await oauth2.authorizeCode(payload, {
+        authenticateHandler: {
+          handle: async (request) => {
+            return oauth2.authenticate(payload);
+          },
+        },
+      });
+      return new Response(JSON.stringify(code));
     },
     {
+      // 需要先通过 用户名密码登录获取 token
       headers: t.Object({
-        // Example: "Basic " + Buffer.from("clientId1:client@secret").toString("base64"),
         authorization: t.String(),
+      }),
+      body: t.Object({
+        client_id: t.String(),
+        response_type: t.String({
+          examples: ["code", "token"],
+        }),
+        state: t.String(),
+        redirect_uri: t.String(),
       }),
     }
   );

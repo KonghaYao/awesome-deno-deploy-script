@@ -1,27 +1,22 @@
-import { OAuth2Model } from "./OAuth2Model.ts";
+import { Client, OAuth2ServerModel, User } from "./OAuth2Model.ts";
 
-export class DenoKVModel implements OAuth2Model {
+export class DenoKVModel implements OAuth2ServerModel {
   constructor(public kv: any) {}
-  async initExample() {
-    await this.kv.set(
-      ["client", "clientId1"],
-      {
-        id: "clientId1",
-        clientSecret: "client@secret",
-        redirectUris: ["http://localhost:8000"],
-        grants: [
-          "password",
-          "authorization_code",
-          "client_credentials",
-          "refresh_token",
-        ],
-      }
-    );
-    await this.kv.set(["user", "mira"], {
-      username: "mira",
-      password: "12345",
-    });
-    return this;
+  async registerUser(user: User, overwrite = false): Promise<boolean> {
+    if (
+      overwrite === false &&
+      !(await this.kv.get(["user", user.username])).value
+    )
+      return false;
+    return this.kv.set(["user", user.username], user);
+  }
+  async registerClient(client: Client, overwrite = false): Promise<boolean> {
+    if (
+      overwrite === false &&
+      !(await this.kv.get(["client", client.id])).value
+    )
+      return false;
+    return this.kv.set(["client", client.id], client);
   }
 
   async getAccessToken(accessToken) {
@@ -31,12 +26,16 @@ export class DenoKVModel implements OAuth2Model {
   async getClient(clientId, clientSecret) {
     return this.kv.get(["client", clientId]).then((res) => res.value);
   }
+  async validateRedirectUri(redirectUri, client) {
+    return client.redirectUris.includes(redirectUri);
+  }
 
   async getUser(username, password) {
     if (!password) return null;
     return this.kv
       .get(["user", username])
-      .then((res) => (res.value?.password === password ? res.value : null));
+      .then((res) => res.value)
+      .then((res: User) => (res?.password === password ? res : null));
   }
 
   async saveToken(token, client, user) {
@@ -50,7 +49,7 @@ export class DenoKVModel implements OAuth2Model {
         grants: client.grants,
       },
       user: {
-        id: user.id,
+        username: user.username,
       },
     };
     await Promise.all([
@@ -67,8 +66,9 @@ export class DenoKVModel implements OAuth2Model {
         id: client.id,
         grants: client.grants,
       },
+      redirectUri: client.redirectUris[0],
       user: {
-        id: user.id,
+        username: user.username,
       },
     };
     await this.kv.set(["authorization_code", code.authorizationCode], codeData);
@@ -84,12 +84,6 @@ export class DenoKVModel implements OAuth2Model {
   async revokeAuthorizationCode(code) {
     await this.kv.delete(["authorization_code", code.authorizationCode]);
     return true;
-  }
-
-  async getUserFromClient(client) {
-    console.log(client);
-    // TODO: find related user
-    return this.users[0];
   }
 
   async getRefreshToken(refreshToken) {
