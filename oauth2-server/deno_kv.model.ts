@@ -1,4 +1,5 @@
 import { Client, OAuth2ServerModel, User } from "./OAuth2Model.ts";
+import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 
 export class DenoKVModel implements OAuth2ServerModel {
   constructor(public kv: any) {}
@@ -8,6 +9,9 @@ export class DenoKVModel implements OAuth2ServerModel {
       !(await this.kv.get(["user", user.username])).value
     )
       return false;
+    if (!user.password) return false;
+    const salt = await bcrypt.genSalt(8);
+    user.password = await bcrypt.hash(user.password, salt);
     return this.kv.set(["user", user.username], user);
   }
   async registerClient(client: Client, overwrite = false): Promise<boolean> {
@@ -35,7 +39,10 @@ export class DenoKVModel implements OAuth2ServerModel {
     return this.kv
       .get(["user", username])
       .then((res) => res.value)
-      .then((res: User) => (res?.password === password ? res : null));
+      .then(async (res: User) => {
+        const isCorrect = await bcrypt.compare(password, res.password);
+        if (isCorrect) return res;
+      });
   }
 
   async saveToken(token, client, user) {

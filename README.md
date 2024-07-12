@@ -22,4 +22,5 @@
 
 ```sh
 curl -fsSL https://x.deno.js.cn/install.sh | sh
+deno run -A --unstable qrcode/index.mjs
 ```
