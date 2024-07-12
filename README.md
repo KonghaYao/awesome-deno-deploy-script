@@ -12,6 +12,8 @@
 8. [qrcode](./qrcode/index.mjs) - 支持 QRcode 解析与生成的服务器脚本
 9. [barcode](./qrcode/index.mjs) - 支持 Barcode 生成的脚本
 10. [image-server](./image-server/index.mjs) - 图片服务器，可以在线帮你通过 url 处理图像
+11. [totp-server](./totp-server/index.mjs) - TOTP 服务器, 用于 TOTP 鉴权认证
+
 
 ## Deno will Do
 

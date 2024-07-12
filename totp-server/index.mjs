@@ -1,5 +1,5 @@
 /**
- * TOTP 服务就是常见的
+ * TOTP 服务就是常见的一次性 6 位验证码验证
  */
 import elysia from "https://esm.sh/elysia";
 import * as OTPAuth from "https://esm.sh/otpauth";
