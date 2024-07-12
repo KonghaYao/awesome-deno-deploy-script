@@ -13,7 +13,11 @@ const oauth2 = (options) => {
 const toSnakeObject = (data) => {
   return Object.fromEntries(
     Object.entries(data).map(([key, value]) => {
-      if (typeof value === "object" && !(value instanceof Array)) {
+      if (
+        typeof value === "object" &&
+        !(value instanceof Array) &&
+        !(value instanceof Date)
+      ) {
         return [snake(key), toSnakeObject(value)];
       }
       return [snake(key), value];
