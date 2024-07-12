@@ -1,3 +1,4 @@
+// 授权码注册
 import "jsr:@kitsonk/xhr";
 import ClientOAuth2 from "https://esm.sh/client-oauth2";
 

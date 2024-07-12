@@ -1,0 +1,11 @@
+### 生成密钥
+GET http://localhost:8000/generate-secret?username=testUser
+Content-Type: application/json
+
+### 生成 OTP
+GET http://localhost:8000/generate-otp?username=testUser
+Content-Type: application/json
+
+### 验证 OTP
+GET http://localhost:8000/verify-otp?username=testUser&token=047294
+Content-Type: application/json

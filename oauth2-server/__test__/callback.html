@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Login Page</title>
+    <title>Callback Page</title>
   </head>
 
   <body></body>
@@ -18,6 +18,16 @@
       });
       const auth = await OtherAuth.code.getToken(location.toString());
       console.log(auth);
+      const oAuthFetch = async (url, req = { url }) => {
+        req.method = req.method ?? "get";
+        const data = await auth.sign(req);
+        return fetch(data.url, data);
+      };
+      oAuthFetch(origin + "/api/users")
+        .then((res) => res.json())
+        .then((res) => {
+          document.body.innerHTML = JSON.stringify(res);  
+        })
     };
   </script>
 </html>
