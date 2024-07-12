@@ -66,22 +66,24 @@ app.get(
   }
 );
 const model = await initExample(new DenoKVModel(kv));
+
+const hostPage = (path) => {
+  return () => {
+    return new Response(Deno.readTextFileSync(new URL(path, import.meta.url)), {
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+      },
+    });
+  };
+};
 app
   .use(
     oauth2({
       model,
     })
   )
-  .get("/", () => {
-    return new Response(
-      Deno.readTextFileSync("./oauth2-server/callback.html"),
-      {
-        headers: {
-          "content-type": "text/html; charset=utf-8",
-        },
-      }
-    );
-  })
+  .get("/", hostPage("./__test__/login.html"))
+  .get("/callback.html", hostPage("./__test__/callback.html"))
   .post(
     "/oauth/user/register",
     ({ oauth2, ...payload }) => {

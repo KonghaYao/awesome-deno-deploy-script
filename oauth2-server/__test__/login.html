@@ -18,6 +18,7 @@
     <script type="module">
       import ClientOAuth2 from "https://esm.sh/client-oauth2";
       window.login = login;
+      const redirect_uri = "http://localhost:8000/callback.html";
       async function login() {
         const Auth = new ClientOAuth2({
           clientId: "clientId1",
@@ -47,7 +48,7 @@
             client_id: "clientId1",
             response_type: "code",
             state: "my-app-name",
-            redirect_uri: "http://localhost:8000/callback.html",
+            redirect_uri,
             // data
           }),
         })
@@ -58,22 +59,12 @@
             console.log(res);
             const url = new URL(res.redirectUri);
             url.searchParams.set("code", res.authorizationCode);
-            url.searchParams.set("redirect_uri", res.redirectUri);
+            url.searchParams.set("redirect_uri", redirect_uri);
             return url.toString();
           });
 
-        // 重定向之后的网站，再获取 token
         console.log(toURL);
-        const OtherAuth = new ClientOAuth2({
-          clientId: "clientId1",
-          clientSecret: "client@secret",
-          accessTokenUri: origin + "/login/oauth/access_token",
-          authorizationUri: origin + "/login/oauth/authorize",
-          redirectUri: toURL,
-        });
-        const auth = await OtherAuth.code.getToken(toURL);
-
-        console.log(auth);
+        location.href = toURL.replace('http://localhost:8000',origin)
       }
     </script>
   </body>

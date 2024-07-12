@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+  </head>
+
+  <body></body>
+  <script type="module">
+    import ClientOAuth2 from "https://esm.sh/client-oauth2";
+    window.onload = async () => {
+      const OtherAuth = new ClientOAuth2({
+        clientId: "clientId1",
+        clientSecret: "client@secret",
+        accessTokenUri: origin + "/login/oauth/access_token",
+        authorizationUri: origin + "/login/oauth/authorize",
+        redirectUri: "http://localhost:8000/callback.html",
+      });
+      const auth = await OtherAuth.code.getToken(location.toString());
+      console.log(auth);
+    };
+  </script>
+</html>
