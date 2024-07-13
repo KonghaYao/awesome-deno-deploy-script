@@ -1,11 +1,12 @@
-### 生成密钥
-GET http://localhost:8000/generate-secret?username=testUser
+### 保存密钥
+GET http://localhost:8000/save-secret?appName=testUser&code=VBEXJ2EXN5IDMTX4CRRD6AMC7BBJ3TRY
 Content-Type: application/json
 
+
 ### 生成 OTP
-GET http://localhost:8000/generate-otp?username=testUser
+GET http://localhost:8000/generate-otp?appName=testUser
 Content-Type: application/json
 
 ### 验证 OTP
-GET http://localhost:8000/verify-otp?username=testUser&token=047294
+GET http://localhost:8000/verify-otp?appName=testUser&token=782118
 Content-Type: application/json
