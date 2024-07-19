@@ -4,6 +4,7 @@ const host = "http://localhost:8000";
 const mockData = () => {
   return [...Array(20).keys()].map((i) => {
     return {
+      channel: "233",
       title: "Test Title" + i,
       author: "Test Author" + i,
       content: "Test Content" + i,
@@ -22,33 +23,33 @@ for await (const iterator of mockData()) {
 }
 
 Deno.test("GET /posts/list", async () => {
-  const response = await fetch(host + "/posts/list");
+  const response = await fetch(host + "/posts/list?channel=233");
   const data = await response.json();
   assertEquals(response.status, 200);
   assertEquals(Array.isArray(data.data), true);
   assertEquals(data.data.length, 10);
   assertEquals(data.next, "Test Title17");
 
-  const res = await fetch(host + "/posts/list?start=Test Title17");
+  const res = await fetch(host + "/posts/list?channel=233&start=Test Title17");
   const data1 = await res.json();
   assertEquals(res.status, 200);
-  assertEquals(data1.data[0].title, 'Test Title17');
-
+  assertEquals(data1.data[0].title, "Test Title17");
 });
 
 Deno.test("GET /posts/get", async () => {
-  const response = await fetch(host + "/posts/get?id=test-id");
+  const response = await fetch(host + "/posts/get?channel=233&id=test-id");
   const data = await response.json();
   assertEquals(response.status, 200);
   assertEquals(data.data, null); // 假设没有这个 id 的数据
 });
 
 Deno.test("GET /posts/get", async () => {
-  const response = await fetch(host + "/posts/get?id=Test Title10");
+  const response = await fetch(host + "/posts/get?channel=233&id=Test Title10");
   const data = await response.json();
   assertEquals(response.status, 200);
   assertEquals(data.data, {
     author: "Test Author10",
+    channel: "233",
     content: "Test Content10",
     title: "Test Title10",
   });
@@ -61,6 +62,7 @@ Deno.test("POST /posts/create", async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      channel: "233",
       title: "Test Title",
       author: "Test Author",
       content: "Test Content",
