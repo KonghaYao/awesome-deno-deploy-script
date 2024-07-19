@@ -1,11 +1,12 @@
-import { Elysia, t } from "https://esm.sh/elysia";
+import { t } from "https://esm.sh/elysia";
+import { toSnakeObject } from "./toSnakeObject";
 
 let MASTERKEY = Deno.env.get("OAUTH2_MASTER_KEY");
 if (!MASTERKEY) {
   MASTERKEY = crypto.randomUUID().toString();
   console.log("检测到未提供 OAUTH2_MASTER_KEY，自动生成", MASTERKEY);
 }
-const checkMasterKey = async (ctx) => {
+const checkMasterKey = async (payload) => {
   const masterKey = payload.headers.authorization.split(" ")[1];
   if (MASTERKEY !== masterKey) {
     throw new Error("Master Key is not valid");

@@ -4,7 +4,7 @@ const stream = await fetch(
     "https://bitiful-contents.butterix.com/cHJvLTQ/images/aGplFoOknVV6wUe7ByC45Q0p3z8.png"
 ).then((res) => res.arrayBuffer());
 Deno.serve((req) =>
-    handle(
+    ImageServer(
         req,
         (path) => {
             console.log(path);
@@ -33,7 +33,7 @@ function getQSNumber(value, isFloat = false) {
  * @param {Request} req
  * @param {(path: string) => Promise<Response>} getFileStream
  */
-async function handle(req, getFileStream, prefix = "/") {
+async function ImageServer(req, getFileStream, prefix = "/") {
     const url = new URL(req.url);
     const qs = url.searchParams;
     let contentType = undefined;

@@ -1,29 +1,12 @@
 import { Elysia, t } from "https://esm.sh/elysia";
 import { ElysiaOAuthServer } from "./ElysiaOAuthServer.ts";
-import { snake } from "npm:naming-style";
-import { DenoKVModel } from "./deno_kv.model.ts";
+import { toSnakeObject } from "./toSnakeObject.ts";
 const oauth2 = (options) => {
   const oauth = new ElysiaOAuthServer(options);
 
   return new Elysia({
     name: "ElysiaOAuth2Server",
   }).decorate("oauth2", oauth);
-};
-
-/** 标准 OAuth 是蛇形命名法，所以需要转化 key 值 */
-const toSnakeObject = (data) => {
-  return Object.fromEntries(
-    Object.entries(data).map(([key, value]) => {
-      if (
-        typeof value === "object" &&
-        !(value instanceof Array) &&
-        !(value instanceof Date)
-      ) {
-        return [snake(key), toSnakeObject(value)];
-      }
-      return [snake(key), value];
-    })
-  );
 };
 
 export const Oauth2Api = (app, model) =>
