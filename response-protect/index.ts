@@ -16,7 +16,7 @@ export const ResponseProtect = (
   }
   if (config.Referer) {
     const Referer = request.headers.get("Referer");
-    if (!Referer && config.allowRefererVoid !== false)
+    if (!Referer && !config.allowRefererVoid)
       throw new Error("Referer 不能为空");
     const host = new URL(Referer!).host;
     if (
