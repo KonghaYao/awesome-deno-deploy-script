@@ -18,11 +18,11 @@ export const ResponseProtect = (
     const Referer = request.headers.get("Referer");
     if (!Referer && !config.allowRefererVoid)
       throw new Error("Referer 不能为空");
-    const host = new URL(Referer!).host;
+    const getHost = () => new URL(Referer!).host;
     if (
       Referer &&
       config.Referer.some((i) =>
-        typeof i === "string" ? host === i : i.test(host)
+        typeof i === "string" ? getHost() === i : i.test(getHost())
       )
     )
       throw new Error("您的网站已经被禁止使用服务");
