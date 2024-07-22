@@ -31,7 +31,7 @@ Deno.test("Referer protect 通过测试", () => {
     headers: {
       "user-agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-        referer: "https://example.info.com",
+      referer: "https://example.info.com",
     },
   });
   try {
@@ -53,7 +53,7 @@ Deno.test("Referer protect 正则通过测试", () => {
     headers: {
       "user-agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-        referer: "https://info.example.com",
+      referer: "https://info.example.com",
     },
   });
   try {

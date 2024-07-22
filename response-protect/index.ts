@@ -1,10 +1,14 @@
-/** 
+/**
  * 提供 Request 校验，反爬
- * 
+ *
  */
 export const ResponseProtect = (
   request: Request,
-  config: { UA?: boolean; Referer?: (string | RegExp)[] }
+  config: {
+    UA?: boolean;
+    Referer?: (string | RegExp)[];
+    allowRefererVoid?: boolean;
+  }
 ) => {
   if (config.UA) {
     const ua = request.headers.get("user-agent");
@@ -12,7 +16,8 @@ export const ResponseProtect = (
   }
   if (config.Referer) {
     const Referer = request.headers.get("Referer");
-    if (!Referer) throw new Error("Referer 不能为空");
+    if (!Referer && config.allowRefererVoid !== false)
+      throw new Error("Referer 不能为空");
     const host = new URL(Referer!).host;
     if (
       Referer &&
