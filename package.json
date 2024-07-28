@@ -9,5 +9,8 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"dependencies": {}
+	"dependencies": {
+		"@tonyrl/rand-user-agent": "^2.0.73",
+		"fetch-cookie": "^3.0.1"
+	}
 }

@@ -13,7 +13,7 @@
 9. [barcode](./qrcode/index.mjs) - 支持 Barcode 生成的脚本
 10. [image-server](./image-server/index.mjs) - 图片服务器，可以在线帮你通过 url 处理图像
 11. [totp-server](./totp-server/index.mjs) - TOTP 服务器, 用于 TOTP 鉴权认证
-12. [loda-balence](./load-balence/index.ts) - 负载均衡器，用于给不同的资源分配不同的来源
+12. [load-balence](./load-balence/index.ts) - 负载均衡器，用于给不同的资源分配不同的来源
 13. [response-protect](./response-protect/index.ts) - 防止恶意请求函数
 
 ## Deno will Do
@@ -21,7 +21,6 @@
 1. [ ] deno kv dashboard
 2. [ ] OAuth 授权服务器
 3. [x] 图片处理服务器
-
 
 ```sh
 curl -fsSL https://x.deno.js.cn/install.sh | sh
