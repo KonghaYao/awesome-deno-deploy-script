@@ -1,5 +1,5 @@
-import makeFetchCookie from "fetch-cookie";
-import { randUserAgent } from "@tonyrl/rand-user-agent";
+import makeFetchCookie from "npm:fetch-cookie";
+import { randUserAgent } from "npm:@tonyrl/rand-user-agent";
 
 export { randUserAgent };
 /**
