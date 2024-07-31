@@ -9,7 +9,9 @@ async function getWeight(text: string, count: number) {
       .reduce((a, b) => a + b, 0) % count
   );
 }
-/** 创建一个负载均衡器 */
+/** 
+ * 创建一个负载均衡器 
+ * */
 export function createLoadBalence<T extends { name: string; weight: number }>(
   nodes: T[]
 ) {
