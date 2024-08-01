@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
 <style>
     body {
         font-family: "Courier New";
@@ -76,7 +75,14 @@
     import { SonoClient } from "https://deno.land/x/sono@v1.1/src/sonoClient.js"
     import { SonoRTC } from "https://deno.land/x/sono@v1.1/src/sonoRTC.js"
 
-    const sono = new SonoClient('ws://localhost:8000/ws');
+    const url = new URL('wss://localhost/ws')
+    url.host = location.host
+    if(location.protocol==='https:'){
+        url.protocol = 'wss:'
+    }else{
+        url.protocol = 'ws:'
+    }
+    const sono = new SonoClient(url);
     // use sono example 
     // const sono = new SonoClient('wss://healthy-newt-50.deno.dev/ws');
 
