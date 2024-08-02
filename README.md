@@ -24,5 +24,7 @@
 
 ```sh
 curl -fsSL https://x.deno.js.cn/install.sh | sh
+export DENO_INSTALL="/root/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
 deno run -A --unstable qrcode/index.mjs
 ```

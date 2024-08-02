@@ -1,4 +1,5 @@
 import { Sono } from "jsr:@sono/core";
+import { loadUrl } from "../load-url/index.ts";
 const sono = new Sono();
 Deno.serve(
   /**
@@ -10,7 +11,7 @@ Deno.serve(
       return sono.connect(req);
     }
     return new Response(
-      await Deno.readTextFile(new URL("./client.html", import.meta.url)),
+      await loadUrl(new URL("./client.html", import.meta.url)),
       { headers: { "content-type": "text/html" } }
     );
   }
