@@ -15,6 +15,7 @@
 11. [totp-server](./totp-server/index.mjs) - TOTP 服务器, 用于 TOTP 鉴权认证
 12. [load-balence](./load-balence/index.ts) - 负载均衡器，用于给不同的资源分配不同的来源
 13. [response-protect](./response-protect/index.ts) - 防止恶意请求函数
+14. [mermaid](./mermaid/index.ts) - 一个 Mermaid 绘图的网站，可以通过 iframe 直接渲染
 
 ## Deno will Do
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script type="module">
+    import mermaid from "https://unpkg.com/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+    mermaid.initialize();
+    const readCodeFromHash = () => {
+        if (location.hash !== '#') {
+
+            drawDiagram(decodeURIComponent(location.hash.slice(1)))
+        }
+        console.log('接收到代码', location.hash)
+
+    }
+    window.addEventListener('hashchange', readCodeFromHash)
+    window.onload = () => {
+        readCodeFromHash()
+    }
+    const drawDiagram = async function (graphDefinition) {
+        const { svg } = await mermaid.render('graphDiv', graphDefinition);
+        document.body.innerHTML = svg;
+    };
+
+
+</script>
+
+</html>
