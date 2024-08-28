@@ -1,0 +1,3 @@
+
+GET http://localhost:8000?url=https://bing.com
+Content-Type: application/json
