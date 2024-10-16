@@ -44,14 +44,7 @@ const JSONinterval = function (content2) {
   return contentParsed;
 };
 
-import * as path from "node:path";
-
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-import c from "npm:@tonyrl/rand-user-agent/data/user-agents.json" assert { type: 'json' };
+import c from "https://unpkg.com/@tonyrl/rand-user-agent@2.0.81/data/user-agents.json" assert { type: 'json' };
 
 let content = JSONfrequencyNormalize(c);
 if (JSONIsFrequency(content)) {
