@@ -32,7 +32,7 @@ export const handler = async (req: Request, connInfo) => {
 
 export const recordHandler = async (req: Request, connInfo) => {
     const log = Object.fromEntries(new URL(req.url).searchParams.entries());
-    await db.metrics.add(log, { expireIn: 1000 * 60 });
+    await db.metrics.add(log, { expireIn: 1000 * 60 * 60 * 24 * 7 });
     return new Response(
         JSON.stringify({
             code: 0,
