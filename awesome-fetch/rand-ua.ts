@@ -1,6 +1,5 @@
 // src/helpers.ts
 const randomElement = function (array) {
-    console.log(array)
   let index = Math.floor(
     Math.random() * (array[Object.keys(array).pop()].maxIndex + 1)
   );
