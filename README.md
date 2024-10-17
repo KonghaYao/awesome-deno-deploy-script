@@ -16,6 +16,7 @@
 12. [load-balence](./load-balence/index.ts) - 负载均衡器，用于给不同的资源分配不同的来源
 13. [response-protect](./response-protect/index.ts) - 防止恶意请求函数
 13. [og-scraper](./og-scraper/index.ts) - 获取网页的 opengraph 标签
+14. [watch-tower](./watch-tower/index.ts) - 监控服务器，用于监控服务器状态
 
 ## Deno will Do
 
