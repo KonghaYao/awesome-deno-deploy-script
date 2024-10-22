@@ -10,6 +10,7 @@ export interface Metrics {
     language?: string;
     referer?: string;
     host: string;
+    createTime: string;
 }
 
 const kv = await Deno.openKv();
@@ -19,10 +20,7 @@ const db = kvdex(kv, {
     metrics: collection(MetricsModel),
 });
 
-/**
- * post 获取分析数据
- * get 加载埋点数据
- */
+/** 总服务入口，get 记录，post 分析 */
 export const handler = async (req: Request, connInfo) => {
     if (req.method === "POST") {
         return handlerAnalysis(req, connInfo);
@@ -30,9 +28,10 @@ export const handler = async (req: Request, connInfo) => {
     return recordHandler(req, connInfo);
 };
 
+/** 记录服务 */
 export const recordHandler = async (req: Request, connInfo) => {
     const log = Object.fromEntries(new URL(req.url).searchParams.entries());
-    await db.metrics.add(log, { expireIn: 1000 * 60 * 60 * 24 * 7 });
+    await db.metrics.add(log, { expireIn: 1000 * 60 * 60 * 24 });
     return new Response(
         JSON.stringify({
             code: 0,
@@ -41,7 +40,9 @@ export const recordHandler = async (req: Request, connInfo) => {
     );
 };
 
+/** 分析层 */
 export const handlerAnalysis = async (req: Request, connInfo) => {
+    // 聚合函数这里写
     const agg = [getHostRate()];
     await db.metrics.forEach((doc) => {
         agg.forEach((fn) => {
@@ -70,16 +71,28 @@ class CountingMap<T> extends Map<string, T[]> {
         return this;
     }
 }
+
+
+/** 分析层 1 统计 host 访问量 */
 const getHostRate = () => {
     const hostCount = new CountingMap<Metrics>();
     return {
         result: () => {
             return {
-                top20Host: [...hostCount.entries()]
+                topHost: [...hostCount.entries()]
                     .sort(([_, v], [__, v1]) => {
                         return v1.length - v.length;
                     })
-                    .slice(0, 20),
+                    .slice(0, 20)
+                    .map(([k, v]) => {
+                        return [
+                            k,
+                            // 按照时间聚合
+                            [...groupByDate(v, "createTime").entries()].map(([k, v]) => {
+                                return [k, v.length];
+                            }),
+                        ];
+                    }),
             };
         },
         forEach(doc: Metrics) {
@@ -87,3 +100,21 @@ const getHostRate = () => {
         },
     };
 };
+
+import { format, parseISO } from "https://esm.sh/date-fns";
+/** 时间聚合函数 */
+function groupByDate<T extends string, K extends { [k in T]: string }>(
+    items: K[],
+    dateKey: T,
+    timeFormat = "yyyy-MM-dd HH"
+) {
+    return items.reduce((acc, item) => {
+        const date: string = format(parseISO(item[dateKey]), timeFormat);
+        if (!acc.has(date)) {
+            acc.set(date, [item]);
+            return acc;
+        }
+        acc.get(date)!.push(item);
+        return acc;
+    }, new Map<string, K[]>());
+}

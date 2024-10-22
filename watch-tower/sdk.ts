@@ -10,12 +10,6 @@ import {
     Modules,
 } from "https://esm.sh/ua-parser-js@2.0.0-beta.3/extensions";
 import { parseAcceptLanguage } from "https://esm.sh/intl-parse-accept-language";
-
-
-/**
- * const log = getLogFromRequest(new Request('http://localhost:3000/test'), '127.0.0.1')
- * const url  = getReportURL('http://localhost:8000',log)
- */
 export const getLogFromRequest = (req: Request, ip?: string) => {
     const referer = req.headers.get("Referer") || req.url;
 
