@@ -143,7 +143,7 @@ function groupByDate<T extends string, K extends { [k in T]: string }>(
       acc.get(date)!.push(item);
       return acc;
     } catch (e) {
-      console.log("error", e.message, dataKey, item[dataKey]);
+      console.log("error", e.message, dateKey, item[dateKey]);
       return acc;
     }
   }, new Map<string, K[]>());
