@@ -46,7 +46,7 @@ export const handlerAnalysis = async (req: Request, connInfo) => {
   const qs = new URL(req.url).searchParams;
   const events = qs.get("events")?.split(",") || [];
   // 聚合函数这里写
-  const agg = [getHostRate()];
+  const agg = [getHostRate(), totalCount()];
 
   await db.metrics.forEach((doc) => {
     // 过滤函数这里写
@@ -111,6 +111,21 @@ const getHostRate = () => {
   };
 };
 
+/** 分析层 2 统计访问量 */
+const totalCount = () => {
+  let totalCount = 0;
+  return {
+    result: () => {
+      return {
+        totalCount,
+      };
+    },
+    forEach(doc: Metrics) {
+      totalCount++;
+    },
+  };
+};
+
 import { format, parseISO } from "https://esm.sh/date-fns";
 /** 时间聚合函数 */
 function groupByDate<T extends string, K extends { [k in T]: string }>(
@@ -119,12 +134,17 @@ function groupByDate<T extends string, K extends { [k in T]: string }>(
   timeFormat = "yyyy-MM-dd HH"
 ) {
   return items.reduce((acc, item) => {
-    const date: string = format(parseISO(item[dateKey]), timeFormat);
-    if (!acc.has(date)) {
-      acc.set(date, [item]);
+    try {
+      const date: string = format(parseISO(item[dateKey]), timeFormat);
+      if (!acc.has(date)) {
+        acc.set(date, [item]);
+        return acc;
+      }
+      acc.get(date)!.push(item);
+      return acc;
+    } catch (e) {
+      console.log("error", e.message, dataKey, item[dataKey]);
       return acc;
     }
-    acc.get(date)!.push(item);
-    return acc;
   }, new Map<string, K[]>());
 }
