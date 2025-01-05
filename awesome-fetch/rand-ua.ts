@@ -43,7 +43,7 @@ const JSONinterval = function (content2) {
   return contentParsed;
 };
 
-import c from "https://unpkg.com/@tonyrl/rand-user-agent@2.0.81/data/user-agents.json" assert { type: 'json' };
+import c from "https://unpkg.com/@tonyrl/rand-user-agent@2.0.81/data/user-agents.json" with { type: 'json' };
 
 let content = JSONfrequencyNormalize(c);
 if (JSONIsFrequency(content)) {
